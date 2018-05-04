@@ -10,6 +10,7 @@ void printPretty(node *root, int level, int indentSpace, std::ostream& out);
 void printDefault(node *p);
 int maxHeight(node* p);
 int checkBlackNodeProperty(node*p);
+void updateFont();
 
 void removeNilNodes(node* p);
 node* copyTree(node* orgTree, node* parent);

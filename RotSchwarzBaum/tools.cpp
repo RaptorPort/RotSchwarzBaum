@@ -286,3 +286,37 @@ void printDefault(node *p) {
 	}
 }
 //------------------------------------------------------------------OUTPUT-----------------------------------------------------------------------------------------
+
+void updateFont() {
+	CONSOLE_FONT_INFOEX cfi;
+	GetCurrentConsoleFontEx(hstdout, false, &cfi);
+
+	SHORT keyStateP = GetKeyState('P');
+	SHORT keyStateO = GetKeyState('O');
+	if (keyStateP & 0x8000) {
+		cfi.cbSize = sizeof(cfi);
+		cfi.dwFontSize.Y++;
+		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+	}
+	else if (keyStateO & 0x8000) {
+
+		cfi.cbSize = sizeof(cfi);
+		if (cfi.dwFontSize.Y > 1)
+			cfi.dwFontSize.Y--;
+		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+	}
+}
+
+CONSOLE_FONT_INFOEX initFont() {
+	//set FONT
+	CONSOLE_FONT_INFOEX cfi;
+	cfi.cbSize = sizeof(cfi);
+	cfi.nFont = 0;
+	cfi.dwFontSize.X = 0;                   // Width of each character in the font
+	cfi.dwFontSize.Y = 20;                  // Height
+	cfi.FontFamily = FF_DONTCARE;
+	cfi.FontWeight = FW_NORMAL;
+
+	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+	return cfi;
+}
