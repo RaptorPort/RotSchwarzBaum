@@ -94,6 +94,39 @@ void freeTree(node* p) {
 		free(p->data); //free data
 	free(p); //free node
 }
+/*
+//returns the successor of the given node
+node* successor(node *p) {
+	node *y = NULL;
+	if (p->left && p->left->data) {
+		y = p->left;
+		while (y->right->data)
+			y = y->right;
+	}
+	else if (p->right && p->right->data)
+	{
+		y = p->right;
+		while (y->left && y->left->data)
+			y = y->left;
+	}
+	return y;
+}
+*/
+node* successor(node *p) {
+	node *y = NULL;
+	if (p->right && p->right->data) {
+		y = p->right;
+		while (y->left->data)
+			y = y->left;
+	}
+	else if (p->left && p->left->data)
+	{
+		y = p->left;
+		while (y->right && y->right->data)
+			y = y->right;
+	}
+	return y;
+}
 
 #define COUNT 10 // for tree output
 // Function to print binary tree in 2D

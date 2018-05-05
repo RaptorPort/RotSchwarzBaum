@@ -11,6 +11,7 @@ void printDefault(node *p);
 int maxHeight(node* p);
 int checkBlackNodeProperty(node*p);
 void updateFont();
+node* successor(node *p);
 
 void removeNilNodes(node* p);
 node* copyTree(node* orgTree, node* parent);
