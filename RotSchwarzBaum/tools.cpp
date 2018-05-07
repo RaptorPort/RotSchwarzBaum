@@ -26,29 +26,6 @@ HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
 using namespace std;
 
 
-int checkBlackNodeProperty(node *p) {
-	//abort on nullptr
-	if (!p)
-		return 0;
-
-	if (!p->data && p->color == black)
-		return 1;
-
-	//left node
-	int l = p->color == black ? 1 + checkBlackNodeProperty(p->left) : checkBlackNodeProperty(p->left);
-
-	//right node
-	int r = p->color == black ? 1 + checkBlackNodeProperty(p->right) : checkBlackNodeProperty(p->right);
-
-	//check if it is the same
-	if (r == l) {
-		return r;
-	}
-	else {
-		return -10;
-	}
-}
-
 //just copy the data and color, the rest are pointers which will be different 
 node* cloneNode(node *p) {
 	if (p) {
@@ -126,6 +103,40 @@ node* successor(node *p) {
 			y = y->right;
 	}
 	return y;
+}
+
+int checkBlackNodeProperty(node *p) {
+	//abort on nullptr
+	if (!p)
+		return 0;
+
+	if (!p->data && p->color == black)
+		return 1;
+
+	//left node
+	int l = p->color == black ? 1 + checkBlackNodeProperty(p->left) : checkBlackNodeProperty(p->left);
+
+	//right node
+	int r = p->color == black ? 1 + checkBlackNodeProperty(p->right) : checkBlackNodeProperty(p->right);
+
+	//check if it is the same
+	if (r == l) {
+		return r;
+	}
+	else {
+		return -100;
+	}
+}
+
+int countDataNodes(node *p) {
+	//abort on nullptr
+	if (!p)
+		return 0;
+
+	if (!p->data)
+		return 0;
+
+	return countDataNodes(p->left) + countDataNodes(p->right) + 1;
 }
 
 #define COUNT 10 // for tree output
