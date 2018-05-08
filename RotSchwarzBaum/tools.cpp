@@ -5,8 +5,8 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h> 
-#include <math.h>
+//#include <time.h> 
+//#include <math.h>
 
 //OUTPUT STUFF
 #include <Windows.h>
@@ -16,7 +16,7 @@
 #include <deque>
 #include <iomanip>
 #include <sstream>
-//#include <string>
+
 
 CONSOLE_SCREEN_BUFFER_INFO csbi;
 HANDLE hstdout = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -105,6 +105,20 @@ node* successor(node *p) {
 	return y;
 }
 
+int maxHeight(node* p) {
+	if (p == NULL)
+		return 0;
+	//stop at NILchild
+	//if (p->data == NULL)
+	//	return 1;
+
+	//get deeper subtree
+	int l = maxHeight(p->left);
+	int r = maxHeight(p->right);
+
+	return l >= r ? l + 1 : r + 1;
+}
+
 int checkBlackNodeProperty(node *p) {
 	//abort on nullptr
 	if (!p)
@@ -138,6 +152,28 @@ int countDataNodes(node *p) {
 
 	return countDataNodes(p->left) + countDataNodes(p->right) + 1;
 }
+
+void printStats(node *p) {
+	cout << "#blackNodeHeight: " << checkBlackNodeProperty(p) << "   #treeHeight" << maxHeight(p) << "   #nodes: " << countDataNodes(p) << endl;
+}
+
+void printStats(node *p, long time) {
+	cout << "#blackNodeHeight: " << checkBlackNodeProperty(p) << "   #treeHeight" << maxHeight(p) << "   #nodes: " << countDataNodes(p);
+	if (time > 1000) {
+		time /= 1000;
+		if (time > 1000) {
+			time /= 1000;
+			cout << "   #time: " << time << " milliseconds" << endl;
+		}
+		else {
+			cout << "   #time: " << time << " microseconds" << endl;
+		}
+	}
+	else {
+		cout << "   #time: " << time << " nanoseconds" << endl;
+	}
+}
+
 
 #define COUNT 10 // for tree output
 // Function to print binary tree in 2D
@@ -208,19 +244,7 @@ void removeNilNodes(node* p) {
 	removeNilNodes(p->right);
 }
 
-int maxHeight(node* p) {
-	if (p == NULL)
-		return 0;
-	//stop at NILchild
-	//if (p->data == NULL)
-	//	return 1;
 
-	//get deeper subtree
-	int l = maxHeight(p->left);
-	int r = maxHeight(p->right);
-
-	return l >= r ? l + 1 : r + 1;
-}
 
 // Convert an integer value to string
 string intToString(int val) {
@@ -315,19 +339,26 @@ void printPretty(node *root, int level, int indentSpace, ostream& out) {
 }
 
 //Default RB-Print - Wrapper over printPretty
+void printDefault(node *p, int show_nil_childs, int maxHeightToPrint) {
+	int height = maxHeight(p);
+	if (height <= maxHeightToPrint || maxHeightToPrint == -1) {
+		if (height <= show_nil_childs && show_nil_childs != -1) {
+			//print tree with NIL childs
+			printPretty(p, 1, 0, cout);
+		}
+		else {
+			//make a copy
+			node* cpy = copyTree(p, NULL);
+			//delete NIL childs in copy
+			removeNilNodes(cpy);
+			printPretty(cpy, 1, 0, cout);
+			freeTree(cpy);
+		}
+	}
+}
+
 void printDefault(node *p) {
-	if (maxHeight(p) <= AUTO_HIDE_NIL_CHILDS && AUTO_HIDE_NIL_CHILDS != -1) {
-		//print tree with NIL childs
-		printPretty(p, 1, 0, cout);
-	}
-	else {
-		//make a copy
-		node* cpy = copyTree(p, NULL);
-		//delete NIL childs in copy
-		removeNilNodes(cpy);
-		printPretty(cpy, 1, 0, cout);
-		freeTree(cpy);
-	}
+	printDefault(p, 6, 7);
 }
 //------------------------------------------------------------------OUTPUT-----------------------------------------------------------------------------------------
 
@@ -351,16 +382,10 @@ void updateFont() {
 	}
 }
 
-CONSOLE_FONT_INFOEX initFont() {
-	//set FONT
+void updateFont(int i) {
 	CONSOLE_FONT_INFOEX cfi;
+	GetCurrentConsoleFontEx(hstdout, false, &cfi);
 	cfi.cbSize = sizeof(cfi);
-	cfi.nFont = 0;
-	cfi.dwFontSize.X = 0;                   // Width of each character in the font
-	cfi.dwFontSize.Y = 20;                  // Height
-	cfi.FontFamily = FF_DONTCARE;
-	cfi.FontWeight = FW_NORMAL;
-
+	cfi.dwFontSize.Y = i;
 	SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
-	return cfi;
 }

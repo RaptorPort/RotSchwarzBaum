@@ -2,7 +2,7 @@
 
 #ifndef MYNODE_H
 #define MYNODE_H
-enum color { red, black, doubleBlack };
+enum color { red, black };
 
 struct node {
 	color color;
