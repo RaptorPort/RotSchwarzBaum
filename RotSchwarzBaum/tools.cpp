@@ -58,14 +58,14 @@ node* copyTree(node* orgTree, node *parent) {
 }
 
 void freeTree(node* p) {
+	if (!p)
+		return;
 	//free left subtree
-	if (p->left) {
-		freeTree(p->left);
-	}
+	freeTree(p->left);
+	
 	//free right subtree
-	if (p->right) {
-		freeTree(p->right);
-	}
+	freeTree(p->right);
+	
 	//free current node
 	if (p->data)
 		free(p->data); //free data
