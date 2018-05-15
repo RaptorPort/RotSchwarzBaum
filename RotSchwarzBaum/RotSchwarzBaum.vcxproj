@@ -148,15 +148,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="mynode.h" />
+    <ClInclude Include="RotSchwarzBaum.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="tools.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RotSchwarzBaum.cpp" />
-    <ClCompile Include="scheduler.cpp" />
-    <ClCompile Include="tools.cpp" />
+    <ClCompile Include="test_rb_tree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
